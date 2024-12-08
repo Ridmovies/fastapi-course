@@ -1,39 +1,10 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 import uvicorn
-from sqlalchemy import text
+from app.hotels.views import router as hotels_router
 
-from app.database import get_session, init_models
-from app.schemas import BookingSchema, HotelSearchArgs
 
 app = FastAPI()
-
-
-# @app.get("/{hotel_id}")
-# async def get_hotels(
-#     hotel_data: HotelSearchArgs = Depends(),
-# ):
-#     return {"message": "ok"}
-#
-#
-# @app.post("/booking")
-# async def booking(data: BookingSchema):
-#     return {
-#         "message": "ok",
-#         "data": data
-#     }
-
-
-@app.get("/check-db-connection")
-async def check_db_connection(session=Depends(get_session)):
-    # Выполняем запрос к базе данных
-    result = await session.execute(text("SELECT 1"))
-    return {"message": "Connection to the database successful"}
-
-
-@app.get("/init-db")
-async def init_db():
-    await init_models()
-    return {"message": "ok"}
+app.include_router(hotels_router)
 
 
 if __name__ == "__main__":
