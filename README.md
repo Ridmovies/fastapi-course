@@ -8,6 +8,8 @@
 
 ## Инструменты в проекте:
 * FastApi
+* Postgres
+* Alembic
 
 
 ## Установка
