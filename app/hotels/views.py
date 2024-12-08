@@ -7,19 +7,19 @@ from app.hotels.schemas import BookingSchema, HotelSearchArgs
 router = APIRouter(prefix="/hotels", tags=["hotels"])
 
 
-@router.get("/{hotel_id}")
-async def get_hotels(
-    hotel_data: HotelSearchArgs = Depends(),
-):
-    return {"message": "ok"}
-
-
-@router.post("/booking")
-async def booking(data: BookingSchema):
-    return {
-        "message": "ok",
-        "data": data
-    }
+# @router.get("/{hotel_id}")
+# async def get_hotels(
+#     hotel_data: HotelSearchArgs = Depends(),
+# ):
+#     return {"message": "ok"}
+#
+#
+# @router.post("/booking")
+# async def booking(data: BookingSchema):
+#     return {
+#         "message": "ok",
+#         "data": data
+#     }
 
 
 @router.get("/check-db-connection")
