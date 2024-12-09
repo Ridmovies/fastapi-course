@@ -34,5 +34,5 @@ async def init_models() -> None:
     In a real-life example we would use Alembic to manage migrations.
     """
     async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)  # noqa: ERA001
+        # await conn.run_sync(Base.metadata.drop_all)  # noqa: ERA001
         await conn.run_sync(Base.metadata.create_all)
