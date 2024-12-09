@@ -1,7 +1,10 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
 
-from app.config import settings
+import logging
+
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 DB_HOST = 'localhost'
 DB_PORT = '5432'
@@ -17,7 +20,7 @@ async_session = async_sessionmaker(async_engine, expire_on_commit=False)
 
 
 class Base(DeclarativeBase):
-    pass
+    ...
 
 
 async def get_session():
