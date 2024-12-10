@@ -1,23 +1,24 @@
-from sqlalchemy import Date, func, Numeric
-from sqlalchemy.orm import Mapped, mapped_column
+from datetime import datetime
+
+from sqlalchemy import Date, ForeignKey, func, Integer, Computed
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
 
-class Hotel(Base):
+class Booking(Base):
     __tablename__ = 'bookings'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    room_id: Mapped[int] = mapped_column(foreign_key='rooms.id')
-    user_id: Mapped[int] = mapped_column(foreign_key='users.id')
-    date_from: Mapped[Date] = mapped_column(nullable=False)
-    date_to: Mapped[Date] = mapped_column(nullable=False)
-    price: Mapped[int] = mapped_column(nullable=False)
+    date_from: Mapped[datetime] = mapped_column(Date, nullable=False)
+    date_to: Mapped[datetime] = mapped_column(Date, nullable=False)
+    price: Mapped[int] = mapped_column(nullable=False, default=100)
     total_days: Mapped[int] = mapped_column(
-        computed=(func.date_part('day', date_to - date_from) + 1),
+        Integer, Computed('date_to - date_from + 1'), nullable=False
     )
-    total_cost = mapped_column(
-        computed=(func.date_part('day', date_to - date_from) + 1) * price,
-        type_=Numeric(precision=8, scale=2),
-        onupdate='IGNORE',
+    total_cost: Mapped[int] = mapped_column(
+        Integer, Computed('(date_to - date_from + 1) * price'),
+        nullable=False
     )
+    room_id: Mapped[int] = mapped_column(ForeignKey('rooms.id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))

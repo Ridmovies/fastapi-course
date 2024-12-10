@@ -1,44 +1,28 @@
-from sqlalchemy import String, Integer, ForeignKey
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped, mapped_column
+from typing import Optional
+
+from sqlalchemy import String, Integer, ForeignKey, JSON
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
 
 class Room(Base):
-    """Model for rooms."""
+    """Модель комнаты."""
 
     __tablename__ = 'rooms'
 
-    id: Mapped[int] = mapped_column(primary_key=True)  # noqa: A003
-    hotel_id: Mapped[str] = mapped_column(ForeignKey('hotels.id'), nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(length=150), nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(
+        String(length=500), nullable=True
+    )
+    price_per_day: Mapped[int] = mapped_column(Integer, nullable=False)
+    services: Mapped[str] = mapped_column(JSON, nullable=False)
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+    hotel_id: Mapped[int] = mapped_column(ForeignKey('hotels.id'))
+    image_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    hotel = relationship('Hotel', back_populates='rooms')
+    booking = relationship('Booking', back_populates='room')
 
-    name: Mapped[str] = mapped_column(
-        doc='Room name',
-        type_=String(100),
-        nullable=False,
-    )
-    description: Mapped[str] = mapped_column(
-        doc='Room description',
-        type_=String(3000),
-        nullable=True,
-    )
-    price: Mapped[int] = mapped_column(
-        doc='Room price',
-        type_=Integer,
-        nullable=False,
-    )
-    services: Mapped[dict] = mapped_column(
-        doc='Room services',
-        type_=JSONB,
-        nullable=True,
-    )
-    quantity: Mapped[int] = mapped_column(
-        doc='Number of rooms',
-        type_=Integer,
-        nullable=False,
-    )
-    image_id: Mapped[int] = mapped_column(
-        doc='Room image id',
-        type_=Integer,
-    )
+    def __str__(self):
+        return f'Комната: id - {self.id}, название - {self.name}'

@@ -1,25 +1,26 @@
-from datetime import date
-from typing import Optional
+from datetime import datetime, date
 
-from fastapi.params import Query
 from pydantic import BaseModel
 
 
-class BookingSchema(BaseModel):
-    room_id: int
+class BookingInSchema(BaseModel):
     date_from: date
     date_to: date
+    price: int
+    room_id: int
+    user_id: int
+
+    class Config:
+        from_attributes = True
 
 
-class HotelSearchArgs:
-    def __init__(
-            self,
-            hotel_id: int,
-            location: str,
-            spa: Optional[bool] = None,
-            stars: Optional[int] = Query(None, ge=1, le=5),
-    ):
-        self.hotel_id = hotel_id
-        self.location = location
-        self.spa = spa
-        self.stars = stars
+class BookingSchema(BaseModel):
+    id: int
+    price: int
+    total_days: int
+    total_cost: int
+    room_id: int
+    user_id: int
+
+    class Config:
+        from_attributes = True
