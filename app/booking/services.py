@@ -1,8 +1,8 @@
-from app.booking.models import Bookings
-from app.service.base import BaceService
+from app.booking.models import Booking
+from app.service.base import BaseService
 
 
-class BookingService(BaceService):
-    model = Bookings
+class BookingService(BaseService):
+    model = Booking
 
 

@@ -19,10 +19,10 @@ class Room(Base):
     price_per_day: Mapped[int] = mapped_column(Integer, nullable=False)
     services: Mapped[str] = mapped_column(JSON, nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
-    hotel_id: Mapped[int] = mapped_column(ForeignKey('hotels.id'))
     image_id: Mapped[int] = mapped_column(Integer, nullable=False)
-    hotel = relationship('Hotel', back_populates='rooms')
-    booking = relationship('Booking', back_populates='room')
+    # hotel_id: Mapped[int] = mapped_column(ForeignKey('hotels.id'))
+    # hotel = relationship('Hotel', back_populates='rooms')
+    # booking = relationship('Booking', back_populates='room')
 
     def __str__(self):
         return f'Комната: id - {self.id}, название - {self.name}'

@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-class BaceService:
+class BaseService:
     model = None
 
     @classmethod
@@ -22,3 +22,10 @@ class BaceService:
         query = select(cls.model).filter_by(id=model_id)
         result = await session.execute(query)
         return result.scalar_one_or_none()
+
+    @classmethod
+    async def create(cls, session: AsyncSession, **data):
+        instance = cls.model(**data)
+        session.add(instance)
+        await session.commit()
+        return instance

@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
@@ -11,5 +11,6 @@ class Hotel(Base):
     services: Mapped[str]
     rooms_quantity: Mapped[int]
     image_id: Mapped[int]
+    # rooms = relationship('Room', back_populates='hotel')
 
 
