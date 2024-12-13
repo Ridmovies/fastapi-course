@@ -25,7 +25,7 @@ async def get_current_user_id(access_token: str = Depends(get_access_token)) -> 
         )
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid access token")
-    user_id: int = payload.get('sub')
+    user_id: int = int(payload.get('sub'))
     expire = payload.get('exp')
     if expire < datetime.utcnow().timestamp():
         raise HTTPException(status_code=401, detail="Access token expired")

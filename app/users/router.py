@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, HTTPException, Response, Depends
 from sqlalchemy import select
 
+from app.users.dependencies import get_current_user_id
 from app.users.models import User
 from app.database import SessionDep
 from app.users.auth import get_password_hash, verify_password, authenticate_user, create_access_token
-from app.users.schemas import UserAuthSchema
+from app.users.schemas import UserAuthSchema, UserOutSchema
 from app.users.services import UserService
 
 router = APIRouter(prefix='/auth', tags=['auth'])
@@ -17,7 +18,14 @@ async def login_user(response: Response, session: SessionDep, user_data: UserAut
         raise HTTPException(status_code=400, detail='User not found')
     access_token = create_access_token({'sub': str(user.id)})
     response.set_cookie('access_token', access_token, httponly=True)
+    print(response.__dict__)
     return access_token
+
+@router.post('/logout')
+async def logout(response: Response):
+    response.delete_cookie('access_token', httponly=True)
+    print(response.__dict__)
+    return Response(status_code=204)
 
 
 @router.post('/register')
@@ -27,3 +35,9 @@ async def register(session: SessionDep, user_data: UserAuthSchema):
         raise HTTPException(status_code=400, detail='User already exist')
     hashed_password = get_password_hash(user_data.password)
     await UserService.create(session, email=user_data.email, hashed_password=hashed_password)
+
+
+@router.get('/me', response_model=UserOutSchema)
+async def get_me(session: SessionDep, current_user_id: int = Depends(get_current_user_id)) -> User:
+    current_user = await UserService.get_one_or_none(session, id=current_user_id)
+    return current_user
