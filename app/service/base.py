@@ -1,31 +1,37 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.database import async_session
+
 
 class BaseService:
     model = None
 
     @classmethod
-    async def get_all(cls, session: AsyncSession, **filter_by):
-        query = select(cls.model).filter_by(**filter_by)
-        result = await session.execute(query)
-        return result.scalars().all()
+    async def get_all(cls, **filter_by):
+        async with async_session() as session:
+            query = select(cls.model).filter_by(**filter_by)
+            result = await session.execute(query)
+            return result.scalars().all()
 
     @classmethod
-    async def get_one_or_none(cls, session: AsyncSession, **filter_by):
-        query = select(cls.model).filter_by(**filter_by)
-        result = await session.execute(query)
-        return result.scalar_one_or_none()
+    async def get_one_or_none(cls, **filter_by):
+        async with async_session() as session:
+            query = select(cls.model).filter_by(**filter_by)
+            result = await session.execute(query)
+            return result.scalar_one_or_none()
 
     @classmethod
-    async def get_one_by_id(cls, session: AsyncSession, model_id:int):
-        query = select(cls.model).filter_by(id=int(model_id))
-        result = await session.execute(query)
-        return result.scalar_one_or_none()
+    async def get_one_by_id(cls, model_id:int):
+        async with async_session() as session:
+            query = select(cls.model).filter_by(id=int(model_id))
+            result = await session.execute(query)
+            return result.scalar_one_or_none()
 
     @classmethod
-    async def create(cls, session: AsyncSession, **data):
-        instance = cls.model(**data)
-        session.add(instance)
-        await session.commit()
-        return instance
+    async def create(cls, **data):
+        async with async_session() as session:
+            instance = cls.model(**data)
+            session.add(instance)
+            await session.commit()
+            return instance

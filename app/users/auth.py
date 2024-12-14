@@ -36,7 +36,7 @@ def create_access_token(data: dict):
 
 async def authenticate_user(session: AsyncSession, email: EmailStr, password: str):
     """Аутентифицирует пользователя."""
-    user = await UserService.get_one_or_none(session, email=email)
+    user = await UserService.get_one_or_none(email=email)
 
     if user and verify_password(password, user.hashed_password):
         return user

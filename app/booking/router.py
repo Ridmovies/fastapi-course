@@ -1,3 +1,5 @@
+from datetime import date
+
 from fastapi import APIRouter, Request, Depends
 from sqlalchemy import select
 
@@ -18,26 +20,31 @@ async def get_booking_list(
         session: SessionDep,
         user_id: int = Depends(get_current_user_id)
 ):
-    user: User = await UserService.get_one_by_id(session, user_id)
+    user: User = await UserService.get_one_by_id(user_id)
     print(f"user: {user}")
-    bookings = await BookingService.get_all(session)
+    bookings = await BookingService.get_all()
     return bookings
 
 
 @router.get("/{booking_id}", response_model=BookingSchema)
 async def get_booking(session: SessionDep, booking_id: int):
-    booking = await BookingService.get_one_by_id(booking_id, session)
+    booking = await BookingService.get_one_by_id(booking_id,)
     return booking
 
 
-@router.post("/", response_model=BookingSchema)
+@router.post("/", response_model=BookingSchema | None)
 async def create_booking(
-    session: SessionDep,
-    booking: BookingInSchema,
-):
-    booking = Booking(**booking.model_dump())
-    session.add(booking)
-    await session.commit()
-    # booking = await BookingService.create(session, booking)
+        user_id: int,
+        room_id: int,
+        date_from: date,
+        date_to: date):
+    booking = await BookingService.add_booking_object(
+        user_id,
+        room_id,
+        date_from,
+        date_to,
+    )
+
     return booking
+
 

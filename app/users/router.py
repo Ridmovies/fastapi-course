@@ -30,14 +30,14 @@ async def logout(response: Response):
 
 @router.post('/register')
 async def register(session: SessionDep, user_data: UserAuthSchema):
-    exist_user = await UserService.get_one_or_none(session, email=user_data.email)
+    exist_user = await UserService.get_one_or_none(email=user_data.email)
     if exist_user:
         raise UserAlreadyExistsException
     hashed_password = get_password_hash(user_data.password)
-    await UserService.create(session, email=user_data.email, hashed_password=hashed_password)
+    await UserService.create(email=user_data.email, hashed_password=hashed_password)
 
 
 @router.get('/me', response_model=UserOutSchema)
 async def get_me(session: SessionDep, current_user_id: int = Depends(get_current_user_id)) -> User:
-    current_user = await UserService.get_one_or_none(session, id=current_user_id)
+    current_user = await UserService.get_one_or_none(id=current_user_id)
     return current_user
