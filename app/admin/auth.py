@@ -1,10 +1,6 @@
 
-from sqladmin import Admin
 from sqladmin.authentication import AuthenticationBackend
 from starlette.requests import Request
-from starlette.responses import RedirectResponse
-
-from app.exceptions import IncorrectUserDataException
 from app.users.auth import authenticate_user, create_access_token
 from app.users.dependencies import get_current_user
 
@@ -28,14 +24,11 @@ class AdminAuth(AuthenticationBackend):
 
     async def authenticate(self, request: Request) -> bool:
         token = request.session.get("token")
-
         if not token:
             return False
-
         user = await get_current_user(token)
         if not user:
             return False
-
         # Check the token in depth
         return True
 
