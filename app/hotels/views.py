@@ -3,8 +3,15 @@ from sqlalchemy import text
 
 from app.database import init_models, get_session
 from app.hotels.schemas import BookingSchema, HotelSearchArgs
+from app.hotels.services import HotelService
 
-router = APIRouter(prefix="/hotels", tags=["hotels"])
+router = APIRouter()
+
+
+@router.get("/")
+async def get_hotels():
+    hotels = await HotelService.get_all()
+    return hotels
 
 
 # @router.get("/{hotel_id}")
