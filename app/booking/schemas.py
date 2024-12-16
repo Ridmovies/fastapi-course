@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class BookingInSchema(BaseModel):
@@ -10,8 +10,9 @@ class BookingInSchema(BaseModel):
     room_id: int
     user_id: int
 
-    class Config:
-        from_attributes = True
+    # class Config:
+    #     from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class BookingSchema(BaseModel):
@@ -22,8 +23,9 @@ class BookingSchema(BaseModel):
     room_id: int
     user_id: int
 
-    class Config:
-        from_attributes = True
+    # class Config:
+    #     from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class BookingOutSchema(BaseModel):
