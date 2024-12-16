@@ -2,9 +2,14 @@ import asyncio
 import json
 from asyncio import BaseEventLoop
 from datetime import datetime
+from typing import AsyncGenerator
 
 import pytest
+import pytest_asyncio
+from fastapi import FastAPI
+from httpx import AsyncClient, ASGITransport
 from sqlalchemy import insert
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.database import async_session, async_engine, Base
@@ -12,6 +17,7 @@ from app.hotels.models import Hotel
 from app.users.models import User
 from app.rooms.models import Room
 from app.booking.models import Booking
+from main import app as fastapi_app
 
 @pytest.fixture(scope='session', autouse=True)
 async def prepare_database():
@@ -54,3 +60,35 @@ def event_loop(request) -> BaseEventLoop:
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
+
+
+@pytest.fixture()
+async def async_client() -> AsyncClient:
+    async with AsyncClient(app=fastapi_app, base_url='http://test') as async_client:
+        yield async_client
+
+
+
+
+
+# @pytest.fixture()
+# async def get_session() -> AsyncSession:
+#     async with async_session() as session:
+#         yield session
+#
+#
+# @pytest.fixture
+# def test_app(db_session: AsyncSession) -> FastAPI:
+#     """Create a test app with overridden dependencies."""
+#     fastapi_app.dependency_overrides[get_session] = lambda: prepare_database
+#     return fastapi_app
+#
+#
+# @pytest_asyncio.fixture
+# async def client(test_app: FastAPI) -> AsyncGenerator[AsyncClient, None]:
+#     """Create a http client."""
+#     async with AsyncClient(
+#         transport=ASGITransport(app=test_app),
+#         base_url="http://test",
+#     ) as a_client:
+#         yield a_client
