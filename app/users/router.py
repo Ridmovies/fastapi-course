@@ -13,12 +13,11 @@ router = APIRouter(prefix='/auth', tags=['auth'])
 
 @router.post('/login')
 async def login_user(response: Response, session: SessionDep, user_data: UserAuthSchema):
-    user = await authenticate_user(session, user_data.email, user_data.password)
+    user = await authenticate_user(user_data.email, user_data.password)
     if not user:
         raise IncorrectUserDataException
     access_token = create_access_token({'sub': str(user.id)})
     response.set_cookie('access_token', access_token, httponly=True)
-    print(response.__dict__)
     return access_token
 
 @router.post('/logout')
