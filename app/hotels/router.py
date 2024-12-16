@@ -1,32 +1,19 @@
 from fastapi import APIRouter, Depends
+from fastapi_cache.decorator import cache
 from sqlalchemy import text
 
 from app.database import init_models, get_session
-from app.hotels.schemas import BookingSchema, HotelSearchArgs
+from app.hotels.schemas import HotelSchema
 from app.hotels.services import HotelService
 
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", response_model=list[HotelSchema])
+@cache(expire=30)
 async def get_hotels():
     hotels = await HotelService.get_all()
     return hotels
-
-
-# @router.get("/{hotel_id}")
-# async def get_hotels(
-#     hotel_data: HotelSearchArgs = Depends(),
-# ):
-#     return {"message": "ok"}
-#
-#
-# @router.post("/booking")
-# async def booking(data: BookingSchema):
-#     return {
-#         "message": "ok",
-#         "data": data
-#     }
 
 
 @router.get("/check-db-connection")

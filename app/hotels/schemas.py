@@ -11,6 +11,14 @@ class BookingSchema(BaseModel):
     date_to: date
 
 
+class HotelSchema(BaseModel):
+    name: str
+    location: str
+    services: str
+    rooms_quantity: int
+    image_id: int
+
+
 class HotelSearchArgs:
     def __init__(
             self,

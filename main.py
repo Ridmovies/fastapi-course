@@ -7,9 +7,10 @@ from fastapi.staticfiles import StaticFiles
 import uvicorn
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from fastapi_cache.decorator import cache
 from starlette.middleware.cors import CORSMiddleware
 from redis import asyncio as aioredis
-from app.hotels.views import router as hotels_router
+from app.hotels.router import router as hotels_router
 from app.users.router import router as users_router
 from app.booking.router import router as bookings_router
 from app.pages.router import router as pages_router
@@ -19,7 +20,7 @@ from app.images.router import router as images_router
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     redis = aioredis.from_url("redis://localhost")
-    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+    FastAPICache.init(RedisBackend(redis), prefix="cache")
     yield
 
 app = FastAPI(lifespan=lifespan)
@@ -46,6 +47,16 @@ app.add_middleware(
         'Access-Control-Allow-Origin', 'Authorization'
     ],
 )
+
+@cache()
+async def get_cache():
+    return 1
+
+
+@app.get("/")
+@cache(expire=60)
+async def index():
+    return dict(hello="world")
 
 
 if __name__ == "__main__":
