@@ -31,6 +31,7 @@ Cервис бронирования отелей.Пользователи мо�
 * Jinja2
 * Redis
 * fastapi-cache2
+* Celery
 
 
 ## Установка
@@ -129,4 +130,17 @@ FROM '/path/to/your/file.csv' DELIMITER ';' CSV HEADER;
 
 ```bash
 psql -U postgres -d booking_db -c "\copy rooms(name, description, price_per_day, services, quantity, hotel_id, image_id) FROM '/path/to/your/file.csv' DELIMITER ';' CSV HEADER;"
+```
+
+## Команды для работы с Celery
+### Запуск рабочего процесса
+```bash
+celery -A app.tasks.tasks:celery worker -l INFO
+```
+app.tasks.tasks:celery - Это путь до экземпляра Celery()
+
+### Запуск планировщика
+To start the celery beat service:
+```bash
+celery -A store beat -l INFO
 ```

@@ -16,10 +16,12 @@ from app.booking.router import router as bookings_router
 from app.pages.router import router as pages_router
 from app.images.router import router as images_router
 
+from app.config import settings
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-    redis = aioredis.from_url("redis://localhost")
+    redis = aioredis.from_url(settings.REDIS_URL)
     FastAPICache.init(RedisBackend(redis), prefix="cache")
     yield
 
