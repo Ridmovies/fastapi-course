@@ -8,8 +8,12 @@ import uvicorn
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
+from sqladmin import Admin
 from starlette.middleware.cors import CORSMiddleware
 from redis import asyncio as aioredis
+
+from app.admin.views import UserAdmin, BookingAdmin, HotelAdmin
+from app.database import async_engine
 from app.hotels.router import router as hotels_router
 from app.users.router import router as users_router
 from app.booking.router import router as bookings_router
@@ -26,6 +30,11 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     yield
 
 app = FastAPI(lifespan=lifespan)
+
+admin = Admin(app, async_engine)
+admin.add_view(UserAdmin)
+admin.add_view(BookingAdmin)
+admin.add_view(HotelAdmin)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
