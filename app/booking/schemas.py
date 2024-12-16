@@ -24,3 +24,7 @@ class BookingSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class BookingOutSchema(BaseModel):
+    test: str

@@ -144,3 +144,9 @@ To start the celery beat service:
 ```bash
 celery -A store beat -l INFO
 ```
+
+### Запустить Flower
+```bash
+celery -A app.tasks.tasks:celery flower
+```
+веб-интерфейс: http://0.0.0.0:5555/
