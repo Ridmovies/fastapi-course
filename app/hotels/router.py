@@ -9,8 +9,7 @@ from app.hotels.services import HotelService
 router = APIRouter()
 
 
-@router.get("/", response_model=list[HotelSchema])
-@cache(expire=30)
+@router.get("", response_model=list[HotelSchema])
 async def get_hotels():
     hotels = await HotelService.get_all()
     return hotels

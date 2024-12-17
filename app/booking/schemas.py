@@ -29,4 +29,7 @@ class BookingSchema(BaseModel):
 
 
 class BookingOutSchema(BaseModel):
-    test: str
+    id: int
+    price: int
+    room_id: int
+    user_id: int

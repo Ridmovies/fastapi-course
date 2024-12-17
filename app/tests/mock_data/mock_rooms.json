@@ -3,7 +3,7 @@
         "hotel_id": 1,
         "name": "Улучшенный с террасой и видом на озеро",
         "description": "Невероятный красоты номер.",
-        "price": 24500,
+        "price_per_day": 24500,
         "services": ["Бесплатный Wi‑Fi", "Кондиционер (с климат-контролем)"],
         "quantity": 5,
         "image_id": 7
@@ -12,7 +12,7 @@
         "hotel_id": 1,
         "name": "Делюкс Плюс",
         "description": "Лучший номер отеля.",
-        "price": 22450,
+        "price_per_day": 22450,
         "services": ["Бесплатный Wi‑Fi", "Кондиционер"],
         "quantity": 10,
         "image_id": 8
@@ -21,7 +21,7 @@
         "hotel_id": 2,
         "name": "Номер на 2-х человек",
         "description": "Красота неописуемая.",
-        "price": 4570,
+        "price_per_day": 4570,
         "services": [],
         "quantity": 15,
         "image_id": 9
@@ -30,7 +30,7 @@
         "hotel_id": 2,
         "name": "Номер на 3-х человек",
         "description": "Красота неописуемая 2.",
-        "price": 4350,
+        "price_per_day": 4350,
         "services": [],
         "quantity": 8,
         "image_id": 10
@@ -39,7 +39,7 @@
         "hotel_id": 3,
         "name": "Номер полулюкс семейный с 1 двуспальной кроватью",
         "description": "2 Красота неописуемая.",
-        "price": 7080,
+        "price_per_day": 7080,
         "services": ["Холодильник"],
         "quantity": 20,
         "image_id": 11
@@ -48,7 +48,7 @@
         "hotel_id": 3,
         "name": "2-комнатный номер люкс комфорт",
         "description": "Красота неописуемая 88.",
-        "price": 9815,
+        "price_per_day": 9815,
         "services": [],
         "quantity": 10,
         "image_id": 12
@@ -57,7 +57,7 @@
         "hotel_id": 4,
         "name": "Стандарт двухместный",
         "description": "Опять красота неописуемая.",
-        "price": 4300,
+        "price_per_day": 4300,
         "services": ["Бесплатный Wi‑Fi", "Холодильник"],
         "quantity": 20,
         "image_id": 13
@@ -66,7 +66,7 @@
         "hotel_id": 4,
         "name": "Стандарт улучшенный ПЛЮС",
         "description": "Best of the best",
-        "price": 4700,
+        "price_per_day": 4700,
         "services": [
             "Бесплатный Wi‑Fi",
             "Холодильник",
@@ -80,7 +80,7 @@
         "hotel_id": 5,
         "name": "Номер стандарт с 2 односпальными кроватями (с завтраком)",
         "description": "Best of the best 2",
-        "price": 5000,
+        "price_per_day": 5000,
         "services": [],
         "quantity": 15,
         "image_id": 15
@@ -89,7 +89,7 @@
         "hotel_id": 5,
         "name": "Номер полулюкс премиум (с завтраком)",
         "description": "Лучший номер отеля (с завтраком).",
-        "price": 8000,
+        "price_per_day": 8000,
         "services": [],
         "quantity": 7,
         "image_id": 16
@@ -98,7 +98,7 @@
         "hotel_id": 6,
         "name": "Стандарт (типовой корпус)",
         "description": "Лучший номер отеля. 2",
-        "price": 8125,
+        "price_per_day": 8125,
         "services": [],
         "quantity": 45,
         "image_id": 17

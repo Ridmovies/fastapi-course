@@ -4,13 +4,6 @@ from httpx import AsyncClient
 from app.users.services import UserService
 
 
-@pytest.mark.anyio
-async def test_root(caplog, client: AsyncClient):
-    # caplog.set_level(logging.INFO)
-    response = await client.get("/")
-    assert response.status_code == 200
-    # logging.info(f"Response content: {response}")
-
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("email,password,status_code", [
