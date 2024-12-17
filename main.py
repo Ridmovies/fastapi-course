@@ -32,6 +32,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(lifespan=lifespan)
 
+
 admin = Admin(app, async_engine, authentication_backend=authentication_backend)
 admin.add_view(UserAdmin)
 admin.add_view(BookingAdmin)
@@ -64,11 +65,17 @@ app.add_middleware(
 async def get_cache():
     return 1
 
+#
+# @app.get("/")
+# @cache(expire=60)
+# async def index():
+#     return dict(hello="world")
+
 
 @app.get("/")
-@cache(expire=60)
-async def index():
-    return dict(hello="world")
+async def root():
+    return {"message": "Tomato"}
+
 
 
 if __name__ == "__main__":

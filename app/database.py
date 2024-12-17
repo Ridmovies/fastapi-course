@@ -19,7 +19,7 @@ else:
     DATABASE_URL = f'postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}'
     DATABASE_PARAMS = {}
 # DATABASE_URL = "sqlite+aiosqlite:///./sqlite.db"
-async_engine = create_async_engine(DATABASE_URL, echo=True, **DATABASE_PARAMS)
+async_engine = create_async_engine(DATABASE_URL, echo=False, **DATABASE_PARAMS)
 async_session = async_sessionmaker(async_engine, expire_on_commit=False)
 
 

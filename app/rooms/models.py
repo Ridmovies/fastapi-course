@@ -20,7 +20,7 @@ class Room(Base):
     services: Mapped[str] = mapped_column(JSON, nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
     image_id: Mapped[int] = mapped_column(Integer, nullable=False)
-    # hotel_id: Mapped[int] = mapped_column(ForeignKey('hotels.id'))
+    hotel_id: Mapped[int] = mapped_column(ForeignKey('hotels.id'))
     # hotel = relationship('Hotel', back_populates='rooms')
     # booking = relationship('Booking', back_populates='room')
 

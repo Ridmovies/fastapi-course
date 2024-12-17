@@ -17,9 +17,9 @@ from app.hotels.models import Hotel
 from app.users.models import User
 from app.rooms.models import Room
 from app.booking.models import Booking
-from main import app as fastapi_app
+from main import app as test_app
 
-@pytest.fixture(scope='session', autouse=True)
+@pytest_asyncio.fixture(scope='session', autouse=True)
 async def prepare_database():
     if settings.MODE != 'TEST':
         raise Exception
@@ -33,42 +33,38 @@ async def prepare_database():
         with open(mock_file, 'r', encoding='utf-8') as open_file:
             return json.load(open_file)
 
+
     hotels = _open_mock_json(model='hotels')
-    rooms = _open_mock_json(model='rooms')
+    # rooms = _open_mock_json(model='rooms')
     users = _open_mock_json(model='users')
-    bookings_ = _open_mock_json(model='bookings')
+    # bookings_ = _open_mock_json(model='bookings')
 
-    for d in bookings_:
-        d['date_from'] = datetime.strptime(d['date_from'], '%Y-%m-%d')
-        d['date_to'] = datetime.strptime(d['date_to'], '%Y-%m-%d')
-
+    # for d in bookings_:
+    #     d['date_from'] = datetime.strptime(d['date_from'], '%Y-%m-%d')
+    #     d['date_to'] = datetime.strptime(d['date_to'], '%Y-%m-%d')
+    #
     async with async_session() as session:
         add_hotels = insert(Hotel).values(hotels)
-        add_rooms = insert(Room).values(rooms)
+    #     add_rooms = insert(Room).values(rooms)
         add_users = insert(User).values(users)
-        add_bookings = insert(Booking).values(bookings_)
-
+    #     add_bookings = insert(Booking).values(bookings_)
+    #
         await session.execute(add_hotels)
-        await session.execute(add_rooms)
+    #     await session.execute(add_rooms)
         await session.execute(add_users)
-        await session.execute(add_bookings)
+    #     await session.execute(add_bookings)
 
         await session.commit()
 
-@pytest.fixture(scope='session')
-def event_loop(request) -> BaseEventLoop:
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
 
-
-@pytest.fixture()
-async def async_client() -> AsyncClient:
-    async with AsyncClient(app=fastapi_app, base_url='http://test') as async_client:
-        yield async_client
-
-
-
+@pytest_asyncio.fixture
+async def client() -> AsyncGenerator[AsyncClient, None]:
+    """Create a http client."""
+    async with AsyncClient(
+        transport=ASGITransport(app=test_app),
+        base_url="http://test",
+    ) as ac:
+        yield ac
 
 
 # @pytest.fixture()

@@ -3,14 +3,12 @@ from datetime import datetime, timedelta
 from jose import jwt
 from passlib.context import CryptContext
 from pydantic import EmailStr
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.users.services import UserService
 
-# from app.users.dao import UserDAO
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 
 def get_password_hash(password):

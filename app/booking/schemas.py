@@ -12,7 +12,7 @@ class BookingInSchema(BaseModel):
 
     # class Config:
     #     from_attributes = True
-    model_config = ConfigDict(from_attributes=True)
+    # model_config = ConfigDict(from_attributes=True)
 
 
 class BookingSchema(BaseModel):
@@ -25,7 +25,7 @@ class BookingSchema(BaseModel):
 
     # class Config:
     #     from_attributes = True
-    model_config = ConfigDict(from_attributes=True)
+    # model_config = ConfigDict(from_attributes=True)
 
 
 class BookingOutSchema(BaseModel):
