@@ -20,9 +20,7 @@ router = APIRouter()
 
 @router.get("", response_model=list[BookingSchema])
 async def get_booking_list(
-        request: Request,
-        session: SessionDep,
-        user_id: int = Depends(get_current_user_id)
+    request: Request, session: SessionDep, user_id: int = Depends(get_current_user_id)
 ):
     user: User = await UserService.get_one_by_id(user_id)
     bookings = await BookingService.get_all()
@@ -31,17 +29,20 @@ async def get_booking_list(
 
 @router.get("/{booking_id}", response_model=BookingSchema)
 async def get_booking(session: SessionDep, booking_id: int):
-    booking = await BookingService.get_one_by_id(booking_id,)
+    booking = await BookingService.get_one_by_id(
+        booking_id,
+    )
     return booking
 
 
 @router.post("", response_model=BookingOutSchema)
 async def create_booking(
-        # user_id: int,
-        room_id: int,
-        date_from: date,
-        date_to: date,
-        user: User = Depends(get_current_user),):
+    # user_id: int,
+    room_id: int,
+    date_from: date,
+    date_to: date,
+    user: User = Depends(get_current_user),
+):
 
     booking = await BookingService.create(
         user_id=user.id,
@@ -50,5 +51,3 @@ async def create_booking(
         date_to=date_to,
     )
     return booking
-
-

@@ -8,7 +8,7 @@ from app.config import settings
 from app.users.services import UserService
 
 
-pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def get_password_hash(password):
@@ -25,10 +25,8 @@ def create_access_token(data: dict):
     """Cоздает токен доступа."""
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=60)
-    to_encode.update({'exp': expire})
-    encoded_jwt = jwt.encode(
-        to_encode, settings.SECRET_KEY, settings.ALGORITHM
-    )
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, settings.ALGORITHM)
     return encoded_jwt
 
 

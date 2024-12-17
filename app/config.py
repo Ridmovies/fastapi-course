@@ -2,8 +2,9 @@ from typing import Literal
 
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
-    MODE: Literal['DEV', 'TEST', 'PROD']
+    MODE: Literal["DEV", "TEST", "PROD"]
 
     DB_HOST: str
     DB_PORT: int
@@ -28,6 +29,7 @@ class Settings(BaseSettings):
     SMTP_PORT: int
 
     class Config:
-        env_file = '.env'
+        env_file = ".env"
+
 
 settings = Settings()

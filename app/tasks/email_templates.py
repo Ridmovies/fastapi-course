@@ -4,21 +4,18 @@ from pydantic import EmailStr
 from app.config import settings
 
 
-def create_booking_confirmation_template(
-    booking: dict,
-    email_to: EmailStr
-):
+def create_booking_confirmation_template(booking: dict, email_to: EmailStr):
     """Формирует email о подтверждении бронирования."""
     email = EmailMessage()
 
-    email['Subject'] = 'Подтверждение бронирования.'
-    email['From'] = settings.SMTP_USER
-    email['To'] = email_to
+    email["Subject"] = "Подтверждение бронирования."
+    email["From"] = settings.SMTP_USER
+    email["To"] = email_to
 
     email.set_content(
         f"""
         <h1>Подтвердите бронирование.</h1>
         """,
-        subtype='html'
+        subtype="html",
     )
     return email

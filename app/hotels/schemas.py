@@ -21,11 +21,11 @@ class HotelSchema(BaseModel):
 
 class HotelSearchArgs:
     def __init__(
-            self,
-            hotel_id: int,
-            location: str,
-            spa: Optional[bool] = None,
-            stars: Optional[int] = Query(None, ge=1, le=5),
+        self,
+        hotel_id: int,
+        location: str,
+        spa: Optional[bool] = None,
+        stars: Optional[int] = Query(None, ge=1, le=5),
     ):
         self.hotel_id = hotel_id
         self.location = location

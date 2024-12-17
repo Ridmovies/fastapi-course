@@ -9,7 +9,7 @@ from app.database import Base
 class Room(Base):
     """Модель комнаты."""
 
-    __tablename__ = 'rooms'
+    __tablename__ = "rooms"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, nullable=False)
     name: Mapped[str] = mapped_column(String(length=150), nullable=False)
@@ -20,9 +20,9 @@ class Room(Base):
     services: Mapped[str] = mapped_column(JSON, nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
     image_id: Mapped[int] = mapped_column(Integer, nullable=False)
-    hotel_id: Mapped[int] = mapped_column(ForeignKey('hotels.id'))
-    hotel: Mapped['Hotel'] = relationship('Hotel', back_populates='rooms')
-    booking: Mapped[list['Booking']] = relationship('Booking', back_populates='room')
+    hotel_id: Mapped[int] = mapped_column(ForeignKey("hotels.id"))
+    hotel: Mapped["Hotel"] = relationship("Hotel", back_populates="rooms")
+    booking: Mapped[list["Booking"]] = relationship("Booking", back_populates="room")
 
     def __str__(self):
-        return f'Комната: id - {self.id}, название - {self.name}'
+        return f"Комната: id - {self.id}, название - {self.name}"

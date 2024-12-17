@@ -22,7 +22,7 @@ class BaseService:
             return result.scalar_one_or_none()
 
     @classmethod
-    async def get_one_by_id(cls, model_id:int):
+    async def get_one_by_id(cls, model_id: int):
         async with async_session() as session:
             query = select(cls.model).filter_by(id=int(model_id))
             result = await session.execute(query)

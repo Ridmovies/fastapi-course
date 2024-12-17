@@ -4,4 +4,3 @@ from app.service.base import BaseService
 
 class HotelService(BaseService):
     model = Hotel
-

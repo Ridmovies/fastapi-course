@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 
 class MyBookingException(HTTPException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-    detail = ''
+    detail = ""
 
     def __init__(self):
         super().__init__(status_code=self.status_code, detail=self.detail)
@@ -11,55 +11,56 @@ class MyBookingException(HTTPException):
 
 class UserAlreadyExistsException(MyBookingException):
     status_code = status.HTTP_409_CONFLICT
-    detail = 'Пользователь уже существует.'
+    detail = "Пользователь уже существует."
 
 
 class IncorrectUserDataException(MyBookingException):
     status_code = status.HTTP_401_UNAUTHORIZED
-    detail = 'Введенные данные не валидны.'
+    detail = "Введенные данные не валидны."
 
 
 class NotAuthUserException(MyBookingException):
     status_code = status.HTTP_401_UNAUTHORIZED
-    detail = 'Вы не аутентифицированы. Выполните вход в систему.'
+    detail = "Вы не аутентифицированы. Выполните вход в систему."
 
 
 class TokenInvalidException(MyBookingException):
     status_code = status.HTTP_401_UNAUTHORIZED
-    detail = 'Токен доступа некорректен.'
+    detail = "Токен доступа некорректен."
 
 
 class TokenExpireException(MyBookingException):
     status_code = status.HTTP_401_UNAUTHORIZED
-    detail = 'Время сессии истекло. Выполните вход в систему.'
+    detail = "Время сессии истекло. Выполните вход в систему."
 
 
 class TokenInvalidDataException(MyBookingException):
     status_code = status.HTTP_401_UNAUTHORIZED
-    detail = 'Сессия некорректна. Переданные данные некорректны.'
+    detail = "Сессия некорректна. Переданные данные некорректны."
 
 
 class RoomCantBookedException(MyBookingException):
     status_code = status.HTTP_409_CONFLICT
-    detail = 'Свободных комнат данного типа не осталось.'
+    detail = "Свободных комнат данного типа не осталось."
 
 
 class NotFoundException(MyBookingException):
     status_code = status.HTTP_404_NOT_FOUND
-    detail = 'Данные не найдены.'
+    detail = "Данные не найдены."
 
 
 class CannotAddDataToDatabase(MyBookingException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-    detail = ('Не удалось добавить запись в базу данных. '
-              'Проверьте корректность данных.')
+    detail = (
+        "Не удалось добавить запись в базу данных. " "Проверьте корректность данных."
+    )
 
 
 class CannotProcessCSV(MyBookingException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-    detail = 'Не удалось обработать CSV файл.'
+    detail = "Не удалось обработать CSV файл."
 
 
 class DateFromCannotBeAfterDateTo(MyBookingException):
     status_code = status.HTTP_400_BAD_REQUEST
-    detail = 'Дата заезда не может быть позже даты выезда.'
+    detail = "Дата заезда не может быть позже даты выезда."

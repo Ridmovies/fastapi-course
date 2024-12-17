@@ -30,6 +30,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     FastAPICache.init(RedisBackend(redis), prefix="cache")
     yield
 
+
 app = FastAPI(lifespan=lifespan)
 
 
@@ -47,29 +48,33 @@ app.include_router(pages_router, prefix="/pages", tags=["pages"])
 app.include_router(images_router, prefix="/images", tags=["images"])
 
 origins = [
-    'http://localhost:3000',
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=['GET', 'POST', 'OPTIONS', 'DELETE', 'PATCH', 'PUT'],
+    allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
     allow_headers=[
-        'Content-Type', 'Set-Cookie', 'Access-Control-Allow-Headers',
-        'Access-Control-Allow-Origin', 'Authorization'
+        "Content-Type",
+        "Set-Cookie",
+        "Access-Control-Allow-Headers",
+        "Access-Control-Allow-Origin",
+        "Authorization",
     ],
 )
+
 
 @cache()
 async def get_cache():
     return 1
 
-#
-# @app.get("/")
-# @cache(expire=60)
-# async def index():
-#     return dict(hello="world")
+
+@app.get("/")
+@cache(expire=60)
+async def index():
+    return dict(hello="world")
 
 
 @app.get("/")
@@ -77,7 +82,5 @@ async def root():
     return {"message": "Tomato"}
 
 
-
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-

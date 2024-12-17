@@ -14,9 +14,10 @@ from app.rooms.models import Room
 from app.booking.models import Booking
 from main import app as test_app
 
-@pytest_asyncio.fixture(scope='session', autouse=True)
+
+@pytest_asyncio.fixture(scope="session", autouse=True)
 async def prepare_database():
-    if settings.MODE != 'TEST':
+    if settings.MODE != "TEST":
         raise Exception
 
     async with async_engine.begin() as conn:
@@ -24,19 +25,18 @@ async def prepare_database():
         await conn.run_sync(Base.metadata.create_all)
 
     def _open_mock_json(model: str) -> dict:
-        mock_file = f'app/tests/mock_data/mock_{model}.json'
-        with open(mock_file, 'r', encoding='utf-8') as open_file:
+        mock_file = f"app/tests/mock_data/mock_{model}.json"
+        with open(mock_file, "r", encoding="utf-8") as open_file:
             return json.load(open_file)
 
-
-    hotels = _open_mock_json(model='hotels')
-    rooms = _open_mock_json(model='rooms')
-    users = _open_mock_json(model='users')
-    bookings_ = _open_mock_json(model='bookings')
+    hotels = _open_mock_json(model="hotels")
+    rooms = _open_mock_json(model="rooms")
+    users = _open_mock_json(model="users")
+    bookings_ = _open_mock_json(model="bookings")
 
     for d in bookings_:
-        d['date_from'] = datetime.strptime(d['date_from'], '%Y-%m-%d')
-        d['date_to'] = datetime.strptime(d['date_to'], '%Y-%m-%d')
+        d["date_from"] = datetime.strptime(d["date_from"], "%Y-%m-%d")
+        d["date_to"] = datetime.strptime(d["date_to"], "%Y-%m-%d")
 
     async with async_session() as session:
         add_hotels = insert(Hotel).values(hotels)
@@ -62,16 +62,14 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
         yield ac
 
 
-@pytest_asyncio.fixture(scope='session')
+@pytest_asyncio.fixture(scope="session")
 async def authenticated_client() -> AsyncGenerator[AsyncClient, None]:
     """Create a http client."""
     async with AsyncClient(
         transport=ASGITransport(app=test_app),
         base_url="http://test",
     ) as ac:
-        await ac.post("/users/auth/login", json={
-            "email": "test@test.com",
-            "password": "test"
-        })
+        await ac.post(
+            "/users/auth/login", json={"email": "test@test.com", "password": "test"}
+        )
         yield ac
-

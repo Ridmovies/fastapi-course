@@ -8,8 +8,9 @@ from pydantic import EmailStr
 from app.config import settings
 from app.tasks.email_templates import create_booking_confirmation_template
 
-celery = Celery('tasks', broker=settings.REDIS_URL)
+celery = Celery("tasks", broker=settings.REDIS_URL)
 celery.conf.broker_connection_retry_on_startup = True
+
 
 @celery.task
 def add(x, y):
@@ -25,10 +26,7 @@ def process_image(path: str):
 
 
 @celery.task
-def send_booking_confirmation_email(
-    booking: dict,
-    email_to: EmailStr
-):
+def send_booking_confirmation_email(booking: dict, email_to: EmailStr):
     """Отправляет email с подтверждением бронирования."""
     email_to = email_to
     email_content = create_booking_confirmation_template(
