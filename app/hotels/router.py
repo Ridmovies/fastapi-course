@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi_cache.decorator import cache
 from sqlalchemy import text
 
-from app.database import init_models, get_session
+from app.database import get_session, init_models
 from app.hotels.schemas import HotelSchema
 from app.hotels.services import HotelService
 

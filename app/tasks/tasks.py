@@ -1,8 +1,8 @@
 import smtplib
 from pathlib import Path
 
-from PIL import Image
 from celery import Celery
+from PIL import Image
 from pydantic import EmailStr
 
 from app.config import settings

@@ -152,3 +152,25 @@ celery -A store beat -l INFO
 celery -A app.tasks.tasks:celery flower
 ```
 веб-интерфейс: http://0.0.0.0:5555/
+
+
+## Линтеры и форматеры:
+```bash
+black --check --diff --color ./app/booking/services.py
+```
+
+```bash
+isort --check-only --diff --profile black ./app/booking/services.py
+```
+
+```bash
+mypy --incremental ./product_app/views.py 
+```
+
+```bash
+autoflake ./app/booking/router.py
+```
+
+```bash
+pyright .
+```

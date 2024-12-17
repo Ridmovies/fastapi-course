@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Response, Depends
+from fastapi import APIRouter, Depends, Response
 
-from app.exceptions import UserAlreadyExistsException, IncorrectUserDataException
+from app.database import SessionDep
+from app.exceptions import IncorrectUserDataException, UserAlreadyExistsException
+from app.users.auth import authenticate_user, create_access_token, get_password_hash
 from app.users.dependencies import get_current_user_id
 from app.users.models import User
-from app.database import SessionDep
-from app.users.auth import get_password_hash, authenticate_user, create_access_token
 from app.users.schemas import UserAuthSchema, UserOutSchema
 from app.users.services import UserService
 
@@ -42,6 +42,6 @@ async def register(session: SessionDep, user_data: UserAuthSchema):
 @router.get("/me", response_model=UserOutSchema)
 async def get_me(
     session: SessionDep, current_user_id: int = Depends(get_current_user_id)
-) -> User:
-    current_user = await UserService.get_one_or_none(id=current_user_id)
+) -> User | None:
+    current_user: User | None = await UserService.get_one_or_none(id=current_user_id)
     return current_user

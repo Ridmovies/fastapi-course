@@ -1,27 +1,25 @@
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
-
+import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-import uvicorn
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
+from redis import asyncio as aioredis
 from sqladmin import Admin
 from starlette.middleware.cors import CORSMiddleware
-from redis import asyncio as aioredis
 
 from app.admin.auth import authentication_backend
-from app.admin.views import UserAdmin, BookingAdmin, HotelAdmin
+from app.admin.views import BookingAdmin, HotelAdmin, UserAdmin
+from app.booking.router import router as bookings_router
+from app.config import settings
 from app.database import async_engine
 from app.hotels.router import router as hotels_router
-from app.users.router import router as users_router
-from app.booking.router import router as bookings_router
-from app.pages.router import router as pages_router
 from app.images.router import router as images_router
-
-from app.config import settings
+from app.pages.router import router as pages_router
+from app.users.router import router as users_router
 
 
 @asynccontextmanager

@@ -1,28 +1,18 @@
 from datetime import date
 
-from fastapi import APIRouter, Request, Depends
-from pydantic import parse_obj_as, TypeAdapter
-from sqlalchemy import select
-
-from app.booking.models import Booking
-from app.booking.schemas import BookingSchema, BookingInSchema, BookingOutSchema
+from fastapi import APIRouter, Depends, Request
+from app.booking.schemas import BookingOutSchema, BookingSchema
 from app.booking.services import BookingService
-from app.config import settings
 from app.database import SessionDep
-from app.users.dependencies import get_current_user_id, get_current_user
+from app.users.dependencies import get_current_user, get_current_user_id
 from app.users.models import User
 from app.users.services import UserService
-
-from app.tasks.tasks import send_booking_confirmation_email
 
 router = APIRouter()
 
 
 @router.get("", response_model=list[BookingSchema])
-async def get_booking_list(
-    request: Request, session: SessionDep, user_id: int = Depends(get_current_user_id)
-):
-    user: User = await UserService.get_one_by_id(user_id)
+async def get_booking_list(user: User = Depends(get_current_user)):
     bookings = await BookingService.get_all()
     return bookings
 

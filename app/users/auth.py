@@ -7,7 +7,6 @@ from pydantic import EmailStr
 from app.config import settings
 from app.users.services import UserService
 
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 

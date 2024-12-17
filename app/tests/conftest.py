@@ -3,15 +3,15 @@ from datetime import datetime
 from typing import AsyncGenerator
 
 import pytest_asyncio
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy import insert
 
-from app.config import settings
-from app.database import async_session, async_engine, Base
-from app.hotels.models import Hotel
-from app.users.models import User
-from app.rooms.models import Room
 from app.booking.models import Booking
+from app.config import settings
+from app.database import Base, async_engine, async_session
+from app.hotels.models import Hotel
+from app.rooms.models import Room
+from app.users.models import User
 from main import app as test_app
 
 

@@ -1,7 +1,8 @@
-from sqlalchemy import String, Integer
+from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+from app.booking.models import Booking
 
 
 class User(Base):

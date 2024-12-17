@@ -1,13 +1,13 @@
 from datetime import datetime
 
-from fastapi import Request, Depends
-from jose import jwt, JWTError
+from fastapi import Depends, Request
+from jose import JWTError, jwt
 
 from app.config import settings
 from app.exceptions import (
+    NotAuthUserException,
     TokenExpireException,
     TokenInvalidException,
-    NotAuthUserException,
 )
 from app.users.models import User
 from app.users.services import UserService
@@ -33,7 +33,9 @@ async def get_current_user_id(access_token: str = Depends(get_access_token)) -> 
     return user_id
 
 
-async def get_current_user(access_token: str = Depends(get_access_token)) -> User:
+async def get_current_user(
+    access_token: str = Depends(get_access_token),
+) -> User | None:
     """Позволяет получить текущего пользователя."""
     try:
         payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
@@ -44,5 +46,5 @@ async def get_current_user(access_token: str = Depends(get_access_token)) -> Use
     if expire < datetime.utcnow().timestamp():
         raise TokenExpireException
 
-    user = await UserService.get_one_by_id(user_id)
+    user: User | None = await UserService.get_one_by_id(user_id)
     return user

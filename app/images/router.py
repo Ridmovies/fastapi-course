@@ -1,5 +1,7 @@
-from fastapi import APIRouter, UploadFile, File
 import shutil
+
+from fastapi import APIRouter, File, UploadFile
+
 from app.tasks.tasks import process_image
 
 router = APIRouter()

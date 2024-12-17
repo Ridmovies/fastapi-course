@@ -1,9 +1,8 @@
 from datetime import date
 
 from fastapi.logger import logger
-from sqlalchemy import select, and_, or_, func, insert
+from sqlalchemy import and_, func, insert, or_, select
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.booking.models import Booking
 from app.database import async_session
