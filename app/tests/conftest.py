@@ -67,6 +67,20 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
         yield ac
 
 
+@pytest_asyncio.fixture(scope='session')
+async def authenticated_client() -> AsyncGenerator[AsyncClient, None]:
+    """Create a http client."""
+    async with AsyncClient(
+        transport=ASGITransport(app=test_app),
+        base_url="http://test",
+    ) as ac:
+        await ac.post("/users/auth/login", json={
+            "email": "test@test.com",
+            "password": "test"
+        })
+        yield ac
+
+
 # @pytest.fixture()
 # async def get_session() -> AsyncSession:
 #     async with async_session() as session:
@@ -80,11 +94,3 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
 #     return fastapi_app
 #
 #
-# @pytest_asyncio.fixture
-# async def client(test_app: FastAPI) -> AsyncGenerator[AsyncClient, None]:
-#     """Create a http client."""
-#     async with AsyncClient(
-#         transport=ASGITransport(app=test_app),
-#         base_url="http://test",
-#     ) as a_client:
-#         yield a_client

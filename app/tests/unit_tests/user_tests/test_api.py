@@ -36,10 +36,10 @@ async def test_register_user(
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("email,password,status_code", [
-                         ('test@test.com', 'test', 409),
-                         ('artem@example.com', 'artem', 409),
+                         ('test@test.com', 'test', 200),
+                         ('artem@example.com', 'artem', 200),
                 ('example', 'example', 422),
-                ('1234455@example.com', '1234455', 409),
+                ('wrong@example.com', '1234455', 401),
 
 ])
 async def test_login_user(
@@ -48,7 +48,7 @@ async def test_login_user(
         status_code: int,
         client: AsyncClient
 ) -> None:
-    response = await client.post("/users/auth/register", json={
+    response = await client.post("/users/auth/login", json={
         "email": email,
         "password": password
     })
@@ -70,3 +70,25 @@ async def test_find_user_by_id(user_id, email, is_present):
         assert user.email == email
     else:
         assert not user
+
+
+@pytest.mark.asyncio
+async def test_get_me(client: AsyncClient):
+    response = await client.get("/users/auth/me")
+    assert response.status_code == 401
+
+    response = await client.post("/users/auth/login", json={
+        "email": "test@test.com",
+        "password": "test"
+    })
+    assert response.status_code == 200
+
+    response = await client.get("/users/auth/me")
+    assert response.status_code == 200
+    assert response.json()["email"] == "test@test.com"
+
+
+@pytest.mark.asyncio
+async def test_auth_get_me(authenticated_client: AsyncClient):
+    response = await authenticated_client.get("/users/auth/me")
+    assert response.status_code == 200

@@ -22,5 +22,5 @@ class Booking(Base):
     )
     room_id: Mapped[int] = mapped_column(ForeignKey('rooms.id'))
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    # user = relationship('User', back_populates='booking')
-    # room = relationship('Room', back_populates='booking')
+    user = relationship('User', back_populates='booking')
+    room = relationship('Room', back_populates='booking')
