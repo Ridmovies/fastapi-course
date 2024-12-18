@@ -11,7 +11,8 @@ from fastapi_cache.decorator import cache
 from redis import asyncio as aioredis
 from sqladmin import Admin
 from starlette.middleware.cors import CORSMiddleware
-from fastapi_versioning import VersionedFastAPI, version
+from fastapi_versioning import VersionedFastAPI
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.admin.auth import authentication_backend
 from app.admin.views import BookingAdmin, HotelAdmin, UserAdmin
@@ -23,6 +24,7 @@ from app.images.router import router as images_router
 from app.logger import logger
 from app.pages.router import router as pages_router
 from app.users.router import router as users_router
+from app.prometheus.router import router as prometheus_router
 
 
 @asynccontextmanager
@@ -34,11 +36,13 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(lifespan=lifespan)
 
+
 app.include_router(hotels_router, prefix="/hotels", tags=["hotels"])
 app.include_router(users_router, prefix="/users")
 app.include_router(bookings_router, prefix="/booking", tags=["booking"])
 app.include_router(pages_router, prefix="/pages", tags=["pages"])
 app.include_router(images_router, prefix="/images", tags=["images"])
+app.include_router(prometheus_router)
 
 origins = [
     "http://localhost:3000",
@@ -89,11 +93,13 @@ app = VersionedFastAPI(
     app,
     version_format="{major}",
     prefix_format="/v{major}",
-    # description='Greet users with a nice message',
-    # middleware=[
-    #     Middleware(SessionMiddleware, secret_key='mysecretkey')
-    # ]
 )
+
+instrumentator = Instrumentator(
+    should_group_status_codes=False,
+    excluded_handlers=[".*admin.*", "/metrics"],
+)
+instrumentator.instrument(app).expose(app)
 
 admin = Admin(app, async_engine, authentication_backend=authentication_backend)
 admin.add_view(UserAdmin)
