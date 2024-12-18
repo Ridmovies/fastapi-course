@@ -8,7 +8,7 @@ from pydantic import EmailStr
 from app.config import settings
 from app.tasks.email_templates import create_booking_confirmation_template
 
-celery = Celery("tasks", broker=settings.REDIS_URL)
+celery = Celery("tasks", broker=f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}")
 celery.conf.broker_connection_retry_on_startup = True
 
 

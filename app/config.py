@@ -5,6 +5,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     MODE: Literal["DEV", "TEST", "PROD"]
+    LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
 
     DB_HOST: str
     DB_PORT: int
@@ -21,7 +22,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ALGORITHM: str
 
-    REDIS_URL: str
+    REDIS_HOST: str
+    REDIS_PORT: int
 
     SMTP_USER: str
     SMTP_PASS: str

@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:15
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env-docker
+#    ports:
+#      - "5433:5432"
+
+  redis:
+    image: redis:7
+    container_name: redis
+    depends_on:
+      - db
+    env_file:
+      - ./.env-docker
+#    ports:
+#      - "6379:6379"
+
+  app:
+    build:
+      context: .
+    container_name: app
+    restart: always
+    volumes:
+      - app_static:/booking/app/static/
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - ./.env-docker
+    command: [ '/booking/docker/app.sh' ]
+    # command: sh -c "alembic upgrade head && gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000"
+    ports:
+      - "5000:8000"
+
+  celery:
+    build:
+      context: .
+    container_name: celery
+#    command: [ '/booking/docker/celery.sh', 'celery' ]
+    command: sh -c "celery --app=app.tasks.tasks:celery worker -l INFO"
+    depends_on:
+      - redis
+    env_file:
+      - ./.env-docker
+
+  flower:
+    build:
+      context: .
+    container_name: flower
+#    command: [ '/booking/docker/celery.sh', 'flower' ]
+    command: sh -c "celery --app=app.tasks.tasks:celery flower"
+    depends_on:
+      - redis
+      - celery
+    env_file:
+      - ./.env-docker
+    ports:
+      - "5555:5555"
+
+volumes:
+  postgres_data:
+  app_static:
